@@ -2,6 +2,10 @@
 
 ## Setup
 
+Enter the pAI-OS backend source directory:
+
+    cd paios/backend/
+
 Create a new python virtual environment (venv) in .venv:
 
     python3 -m venv .venv
