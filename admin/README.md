@@ -2,6 +2,10 @@
 
 ## Installation
 
+Enter the pAI-OS admin source directory:
+
+    cd paios/admin/
+
 Install the application dependencies by running:
 
 ```sh
