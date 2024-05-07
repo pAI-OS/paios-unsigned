@@ -5,7 +5,9 @@ import subprocess
 import packaging
 import pkg_resources
 import json
-import db
+import ConfigManager
+
+cm = ConfigManager.ConfigManager()
 
 # List of users
 # TODO: We're not implementing multi-user yet so this is subject to change
@@ -422,35 +424,35 @@ def stop_ability(abilityId):
 
 # Configuration Management
 
-# Get config item from database
-def get_config_by_key(key):
-    try:
-        value = db.read_config_item(key)
+# Retrieve config item from database
+def retrieve_config_by_key(key):
+    #try:
+        value = cm.retrieve_config_item(key)
         if value is None:
             return {"error": "Config item not found"}, 404
 
         # Parse the stored JSON back into a Python object
         value = json.loads(value)
         return value, 200
-    except Exception as e:
-        return {"error": str(e)}, 500
+    #except Exception as e:
+    #    return {"error": str(e)}, 500
 
 
-# Set config item in database
-def set_config_by_key(key, body):
-    try:
+# Update config item in database
+def update_config_by_key(key, body):
+    #try:
         # Convert body to JSON, even if it's a bare value
         body = json.dumps(body)
-        db.set_config_item(key, body)
+        cm.update_config_item(key, body)
         return {"message": "Config item set successfully"}, 200
-    except Exception as e:
-        return {"error": str(e)}, 500
+    #except Exception as e:
+    #    return {"error": str(e)}, 500
 
 
 # Delete config item from database
 def delete_config_by_key(key):
-    try:
-        db.delete_config_item(key)
+    #try:
+        cm.delete_config_item(key)
         return '', 204
-    except Exception as e:
-        return {"error": str(e)}, 500
+    #except Exception as e:
+    #    return {"error": str(e)}, 500
