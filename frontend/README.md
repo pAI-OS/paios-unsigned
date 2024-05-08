@@ -1,10 +1,10 @@
-# pAI-OS Admin
+# pAI-OS Frontend
 
 ## Installation
 
-Enter the pAI-OS admin source directory:
+Enter the pAI-OS frontend source directory:
 
-    cd paios/admin/
+    cd paios/frontend/
 
 Install the application dependencies by running:
 
