@@ -1,7 +1,10 @@
 #!/usr/bin/env python3
 from flask import Flask, send_from_directory, abort
 from pathlib import Path
-from backend.blueprint import create_and_register_backend
+try:
+    from paios.backend.blueprint import create_and_register_backend
+except ImportError:
+    from backend.blueprint import create_and_register_backend
 
 app = Flask(__name__)
 
@@ -30,4 +33,4 @@ def serve_frontend(subpath):
         return send_from_directory(frontend_dir, 'index.html')
 
 if __name__ == '__main__':
-    app.run(host='localhost', port=3080)
+    app.run(host='localhost', port=3080, debug=True)
