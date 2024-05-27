@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from flask import Flask, send_from_directory, abort
 from pathlib import Path
+from backend.blueprint import create_and_register_backend
 
 app = Flask(__name__)
 
@@ -9,6 +10,9 @@ frontend_dir = Path(__file__).resolve().parent / 'frontend' / 'dist'
 @app.route('/')
 def serve_index():
     return send_from_directory(frontend_dir, 'index.html')
+
+# Register the backend blueprint at /api
+create_and_register_backend(app, '/api')
 
 @app.route('/<path:subpath>')
 def serve_frontend(subpath):
