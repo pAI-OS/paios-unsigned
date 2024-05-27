@@ -27,6 +27,14 @@ def create_and_register_backend(app, url_prefix='/api'):
         app (Flask): The main Flask application instance.
     """
     backend_bp = Blueprint('backend', __name__)
+
+    # @backend_bp.route('/example', methods=['GET'])
+    # def example_route():
+    #     from flask import jsonify
+    #     response = jsonify({"message": "Hello, World!"})
+    #     response.headers['X-Total-Count'] = '123'
+    #     return response
+
     connexion_app = create_backend_app()
     
     # Add the Connexion app's Flask app to the blueprint
