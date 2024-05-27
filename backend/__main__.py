@@ -3,7 +3,6 @@ import os
 import sys
 from pathlib import Path
 from flask import Flask
-from blueprint import create_backend_blueprint
 
 def check_env():
     if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
@@ -44,11 +43,15 @@ def check_env():
     return True
 
 if __name__ == '__main__':
+    try:
+        from backend.blueprint import create_and_register_backend
+    except ImportError:
+        from blueprint import create_and_register_backend
+
     check_env()
     app = Flask(__name__)
 
     # Register the backend blueprint at /api
-    backend_bp = create_backend_blueprint()
-    app.register_blueprint(backend_bp, url_prefix='/api')
+    create_and_register_backend(app, '/api')
 
     app.run(host='localhost', port=3080)
