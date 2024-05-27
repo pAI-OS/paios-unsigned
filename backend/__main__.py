@@ -1,33 +1,11 @@
 #!/usr/bin/env python3
 import os
 import sys
-
-def create_app():
-    import connexion
-    from flask_cors import CORS
-    if __package__ is None and not hasattr(sys, 'frozen'):
-        # Run the module as a script
-        from auth import validate_bearer_token
-    else:
-        # Run the module as part of a package
-        from .auth import validate_bearer_token
-
-    # Uses the connexion library to create a Flask app implmenting the OpenAPI
-    # specification (../apis/paios/openapi.yaml), calling the python functions
-    # in operationId (eg api.get_asset_by_id in api.py)
-
-    app = connexion.App(__name__, specification_dir='../apis/paios/')
-    CORS(app.app, origins='http://localhost:5173', expose_headers='X-Total-Count', supports_credentials=True)
-
-    app.app.before_request(validate_bearer_token)
-
-    app.add_api('openapi.yaml')
-
-    return app
+from pathlib import Path
+from flask import Flask
+from blueprint import create_backend_blueprint
 
 def check_env():
-    from pathlib import Path
-
     if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
         print("Running in a virtual environment ({})".format(sys.prefix))
     else:
@@ -67,5 +45,10 @@ def check_env():
 
 if __name__ == '__main__':
     check_env()
-    app = create_app()
+    app = Flask(__name__)
+
+    # Register the backend blueprint at /api
+    backend_bp = create_backend_blueprint()
+    app.register_blueprint(backend_bp, url_prefix='/api')
+
     app.run(host='localhost', port=3080)
