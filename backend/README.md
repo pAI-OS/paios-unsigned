@@ -22,9 +22,9 @@ Run the backend python/connexion server:
 
     python3 main.py
 
-Visit the API to verify it's working:
+Visit the API to verify it's working (you will need to set your 'Authorization: Bearer <token>' HTTP header to PAIOS_BEARER_TOKEN)
 
-    http://127.0.0.1:3000/users/142
+    http://127.0.0.1:3080/users/142
 
 You should see something like:
 
