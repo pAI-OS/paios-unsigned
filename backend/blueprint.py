@@ -36,6 +36,12 @@ def create_and_register_backend(app, url_prefix='/api'):
     app.register_blueprint(backend_bp, url_prefix=url_prefix)
 
     # Configure CORS specifically for this blueprint
-    CORS(app, resources={r"/api/*": {"origins": "*"}}, expose_headers=['X-Total-Count'], supports_credentials=True)
+    allowed_origins = [
+        "http://localhost",
+        "http://127.0.0.1",
+        "http://::1"
+        #"http://your-frontend-domain.com"  # Add other domains as needed
+    ]
+    CORS(app, resources={r"/api/*": {"origins": allowed_origins}}, expose_headers=['X-Total-Count'], supports_credentials=True)
 
     return backend_bp
