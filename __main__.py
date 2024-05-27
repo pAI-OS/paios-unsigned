@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 from flask import Flask, send_from_directory, abort
 from pathlib import Path
+
+# Conditional import based on the running context (module or script)
 try:
     from paios.backend.blueprint import create_and_register_backend
 except ImportError:

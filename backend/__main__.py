@@ -43,6 +43,7 @@ def check_env():
     return True
 
 if __name__ == '__main__':
+    # Conditional import based on the running context (module or script)
     try:
         from backend.blueprint import create_and_register_backend
     except ImportError:
