@@ -1,8 +1,16 @@
 #!/usr/bin/env python3
+import os
+import sys
+
 def create_app():
     import connexion
     from flask_cors import CORS
-    from auth import validate_bearer_token
+    if __package__ is None and not hasattr(sys, 'frozen'):
+        # Run the module as a script
+        from auth import validate_bearer_token
+    else:
+        # Run the module as part of a package
+        from .auth import validate_bearer_token
 
     # Uses the connexion library to create a Flask app implmenting the OpenAPI
     # specification (../apis/paios/openapi.yaml), calling the python functions
@@ -18,8 +26,6 @@ def create_app():
     return app
 
 def check_env():
-    import os
-    import sys
     from pathlib import Path
 
     if hasattr(sys, 'real_prefix') or (hasattr(sys, 'base_prefix') and sys.base_prefix != sys.prefix):
@@ -61,6 +67,5 @@ def check_env():
 
 if __name__ == '__main__':
     check_env()
-
     app = create_app()
     app.run(host='localhost', port=3080)
