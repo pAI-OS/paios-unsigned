@@ -52,7 +52,7 @@ if __name__ == '__main__':
     check_env()
     app = Flask(__name__)
 
-    # Register the backend blueprint at /api
-    create_and_register_backend(app, '/api')
+    # Register the backend blueprint at /api/v1
+    create_and_register_backend(app, '/api/v1')
 
-    app.run(host='localhost', port=3080)
+    app.run(host='localhost', port=3080, debug=True)
