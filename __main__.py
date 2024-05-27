@@ -17,7 +17,7 @@ def serve_index():
     return send_from_directory(frontend_dir, 'index.html')
 
 # Register the backend blueprint at /api
-create_and_register_backend(app, '/api')
+create_and_register_backend(app, '/api/v1')
 
 @app.route('/<path:subpath>')
 def serve_frontend(subpath):
