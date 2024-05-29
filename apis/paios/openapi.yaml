@@ -734,6 +734,96 @@ paths:
       servers:
         - url: 'http://localhost:3080/api/v1'
           description: ''
+  '/mobile/abilities':
+    get:
+      tags:
+        - Mobile App Abilities Management
+      summary: Retrieve all abilities for mobile app
+      description: Retrieve the information of all abilities available in the mobile app.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Ability'
+              examples:
+                Example 1:
+                  value:
+                    - id: optical-character-recognition
+                      name: Optical Character Recognition
+                      description: Conversion of images to text
+                    - id: vector-database
+                      name: Vector Database
+                      description: Stores vectors (fixed-length lists of numbers) along with other data items
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+                example: '2'
+              description: Count of results required by jsonServer Data Provider for pagination
+  '/mobile/personas':
+    get:
+      tags:
+        - Mobile App Personas Management
+      summary: Retrieve all personas for mobile app
+      description: Retrieve the information of all personas available in the mobile app.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Persona'
+              examples:
+                Example 1:
+                  value:
+                    - id: assistant
+                      name: Assistant Persona
+                      description: A persona for AI assistant with specific skills and knowledge.
+                    - id: agent
+                      name: Agent Persona
+                      description: A persona for AI agent focused on automation and tasks execution.
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+                example: '2'
+              description: Count of results required by jsonServer Data Provider for pagination
+  '/mobile/llms':
+    get:
+      tags:
+        - Mobile App LLMs Management
+      summary: Retrieve all large language models for mobile app
+      description: Retrieve the information of all large language models available in the mobile app.
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/LLM'
+              examples:
+                Example 1:
+                  value:
+                    - id: gpt-3
+                      name: GPT-3
+                      description: Third version of the Generative Pre-trained Transformer.
+                    - id: bert
+                      name: BERT
+                      description: Bidirectional Encoder Representations from Transformers.
+          headers:
+            X-Total-Count:
+              schema:
+                type: string
+                example: '2'
+              description: Count of results required by jsonServer Data Provider for pagination
 tags:
   - name: Abilities Management
     description: Installation and configuration of abilities
@@ -745,6 +835,12 @@ tags:
     description: Management of configuration
   - name: User Management
     description: Management of user accounts
+  - name: Mobile App Abilities Management
+    description: Management of abilities within the mobile app
+  - name: Mobile App Personas Management
+    description: Management of personas within the mobile app
+  - name: Mobile App LLMs Management
+    description: Management of large language models within the mobile app
 components:
   schemas:
     Ability:
@@ -825,3 +921,27 @@ components:
         - id
         - name
         - email
+    Persona:
+      type: object
+      title: Persona
+      description: Personas for AI assistants and agents within the mobile app.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the given persona.
+        name:
+          type: string
+        description:
+          type: string
+    LLM:
+      type: object
+      title: LLM
+      description: Large Language Models available within the mobile app.
+      properties:
+        id:
+          type: string
+          description: Unique identifier for the given LLM.
+        name:
+          type: string
+        description:
+          type: string
