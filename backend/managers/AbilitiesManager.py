@@ -5,6 +5,7 @@ import signal
 from backend.paths import abilities_dir
 from enum import Enum
 from pathlib import Path
+from backend.dependencies.DependencyFactory import DependencyFactory
 
 class AbilityState(Enum):
     AVAILABLE = "available"
@@ -29,7 +30,7 @@ class AbilitiesManager:
         abilities = []
         for ability_path in abilities_dir.iterdir():
             if ability_path.is_dir():
-                ability_id = ability_path.name
+                #ability_id = ability_path.name
                 versions_info = self._get_versions_info(ability_path)
                 version_to_load = versions_info['installed'] or versions_info['latest']
                 if version_to_load:
@@ -70,11 +71,18 @@ class AbilitiesManager:
             'installed': installed_version
         }
 
-    def get_ability(self, id, version=None):
+    def get_ability(self, id, version=None, refresh=True):
         for ability in self.abilities:
             if ability.get('id') == id and (version is None or ability.get('version') == version):
+                if refresh:
+                    self._refresh_dependencies(ability)
                 return ability
         return None
+
+    def _refresh_dependencies(self, ability):
+        dependencies = ability.get('dependencies', [])
+        for dependency in dependencies:
+            DependencyFactory.create_dependency(ability, dependency).refresh_status()
 
     def retrieve_abilities(self, offset=0, limit=100, sort_by=None, sort_order='asc', filters=None, query=None):
         filtered_abilities = self._apply_filters(self.abilities, filters)
