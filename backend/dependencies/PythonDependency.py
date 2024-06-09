@@ -14,21 +14,25 @@ logger = logging.getLogger(__name__)
 
 class PythonDependency(Dependency):
     def handle_exception(self, exception):
-        super().handle_exception(exception)
-
         if isinstance(exception, ContextualVersionConflict):
             logger.error(f"Version conflict detected: {exception}")
+            return {"error": f"Version conflict detected: {exception}"}
+        else:
+            return super().handle_exception(exception)
 
     def refresh_status(self, ability, dependency):
-        package_name = dependency.get('id')
-        required_version = dependency.get('required', '')
+        try:
+            package_name = dependency.get('id')
+            required_version = dependency.get('required', '')
 
-        versions = dependency.get('versions', {})
+            versions = dependency.get('versions', {})
 
-        self._refresh_versions(package_name, required_version, versions)
+            self._refresh_versions(package_name, required_version, versions)
 
-        if versions:
-            dependency['versions'] = versions
+            if versions:
+                dependency['versions'] = versions
+        except Exception as e:
+            self.handle_exception(e)
 
     def _refresh_versions(self, package_name, required_version, versions):
         installed_version = self._get_installed_version(package_name)
@@ -85,11 +89,6 @@ class PythonDependency(Dependency):
             logger.error(f"Error getting satisfactory versions: {e}")
             return []
 
-    def _get_latest_version(self, available_versions):
-        if not available_versions:
-            return None
-        return available_versions[0]
-
     async def _install(self, ability, dependency, background=False):
         if background:
             self._run_in_background(self._install_task, ability, dependency)
@@ -111,7 +110,7 @@ class PythonDependency(Dependency):
         def run_subprocess():
             try:
                 result = subprocess.run(
-                    [sys.executable, '-m', 'pip', 'install', package_with_version],
+                    [sys.executable, '-m', 'pip', 'install', '--force-reinstall', package_with_version],
                     capture_output=True,
                     text=True
                 )
@@ -147,7 +146,7 @@ class PythonDependency(Dependency):
             reload_package(package_name)
             package_version = get_installed_package_version(package_name)
             dependency['version-installed'] = package_version
-            dependency['satisfied'] = self._is_satisfied(package_version, dependency['versions'].get('satisfactory', []))
+            dependency['satisfied'] = self._is_satisfied(package_version, dependency['versions'].get('available', []))
             return {"message": f"Successfully installed {package_with_version} ({package_version})."}
         else:
             error_message = result.stderr
