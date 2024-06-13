@@ -1,45 +1,11 @@
-import json
 import logging.config
 import os
-import yaml
-import uvicorn.config
-from common.paths import logging_config_path
+from common.paths import log_dir
+from common.config import logging_config
 
-def setup_logging(
-    default_path=logging_config_path,
-    default_level=logging.INFO,
-    env_key='PAIOS_LOG_CFG' # to override the default configuration without editing files in repo
-):
-    
-    setup_logging_basic_config()
-
-def setup_logging_basic_config(
-    default_path=logging_config_path,
-    default_level=logging.INFO,
-    env_key='PAIOS_LOG_CFG' # to override the default configuration without editing files in repo
-):
-    def fallback_to_uvicorn_config():
-        """Fallback to Uvicorn's default logging configuration"""
-        logging.config.dictConfig(uvicorn.config.LOGGING_CONFIG)
-
-    path = default_path
-    value = os.getenv(env_key, None)
-    if value:
-        path = value
-
-    if os.path.exists(path):
-        try:
-            with open(path, 'r') as f:
-                if str(path).endswith('.json'):
-                    config = json.load(f)
-                else:
-                    config = yaml.safe_load(f)
-            logging.config.dictConfig(config)
-        except Exception as e:
-            print(f"Failed to load custom logging config '{path}': {e}")
-            fallback_to_uvicorn_config()
-    else:
-        fallback_to_uvicorn_config()
+def setup_logging():
+    os.makedirs(log_dir, exist_ok=True)
+    logging.config.dictConfig(logging_config) # could fallback to uvicorn.config.LOGGING_CONFIG but requires import that may not be available pre-setup/check_env
 
 # Set up logging configuration once on first import only
 setup_logging()
