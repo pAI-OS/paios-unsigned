@@ -14,6 +14,11 @@ env_file = backend_dir / '.env'
 venv_dir = base_dir / '.venv'
 venv_bin_dir = venv_dir / 'bin'
 
+# apps
+apps_dir = base_dir / 'apps'
+default_app = 'default'
+default_app_dir = apps_dir / default_app
+
 # data
 data_dir = base_dir / 'data'
 log_dir = data_dir / 'log'

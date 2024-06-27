@@ -24,8 +24,8 @@
     "dependencies": [
         {
             "type": "python",
-            "id": "fetch_llama_cpp",
-            "name": "fetch_llama_cpp",
+            "id": "fetch-llama-cpp",
+            "name": "fetch-llama-cpp",
             "description": "Fetches the latest and best version of llama.cpp for your system.",
             "versions": {
                 "required": ">=0.1.0"

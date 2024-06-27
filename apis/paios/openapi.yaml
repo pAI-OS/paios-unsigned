@@ -51,7 +51,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Ability'
     parameters:
-      - $ref: '#/components/parameters/snake_id'
+      - $ref: '#/components/parameters/kebab-id'
   '/abilities/{id}/install':
     post:
       tags:
@@ -60,7 +60,7 @@ paths:
       description: Installs the ability with the matching ability id to the specified or latest version.
       operationId: backend.api.AbilitiesView.install
       parameters:
-        - $ref: '#/components/parameters/snake_id'
+        - $ref: '#/components/parameters/kebab-id'
         - $ref: '#/components/parameters/versionOptional'
       responses:
         '200':
@@ -77,7 +77,7 @@ paths:
       description: Upgrades the ability with the matching ability id to the specified or latest version.
       operationId: backend.api.AbilitiesView.upgrade
       parameters:
-        - $ref: '#/components/parameters/snake_id'
+        - $ref: '#/components/parameters/kebab-id'
         - $ref: '#/components/parameters/versionOptional'
       responses:
         '200':
@@ -94,7 +94,7 @@ paths:
       description: Uninstalls the ability with the matching ability id.
       operationId: backend.api.AbilitiesView.uninstall
       parameters:
-        - $ref: '#/components/parameters/snake_id'
+        - $ref: '#/components/parameters/kebab-id'
       responses:
         '200':
           description: Ability uninstalled
@@ -113,7 +113,7 @@ paths:
         '200':
           description: OK
     parameters:
-      - $ref: '#/components/parameters/snake_id'
+      - $ref: '#/components/parameters/kebab-id'
   '/abilities/{id}/stop':
     post:
       tags:
@@ -125,7 +125,7 @@ paths:
         '200':
           description: OK
     parameters:
-      - $ref: '#/components/parameters/snake_id'
+      - $ref: '#/components/parameters/kebab-id'
   '/abilities/{id}/dependencies/{dependency_id}/download':
     post:
       tags:
@@ -136,13 +136,142 @@ paths:
         '200':
           description: Download started
     parameters:
-      - $ref: '#/components/parameters/snake_id'
+      - $ref: '#/components/parameters/kebab-id'
       - name: dependency_id
         in: path
         description: id of the dependency
         required: true
         schema:
-          $ref: '#/components/schemas/kebab-snake_id'
+          $ref: '#/components/schemas/kebab-id'
+  /apps:
+    get:
+      tags:
+        - Apps Management
+      summary: Retrieve all apps
+      description: Retrieve the information of all apps.
+      parameters:
+        - $ref: '#/components/parameters/sort'
+        - $ref: '#/components/parameters/range'
+        - $ref: '#/components/parameters/filter'
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/App'
+          headers:
+            X-Total-Count:
+              $ref: '#/components/headers/X-Total-Count'
+    post:
+      summary: Create new app
+      tags:
+        - Apps Management
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: Missing Required Information
+      description: Create a new app.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppCreate'
+  /apps/{id}:
+    get:
+      tags:
+        - Apps Management
+      summary: Retrieve app by id
+      description: Retrieve the information of the app with the matching app ID.
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      responses:
+        '200':
+          description: App Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App Not Found
+    put:
+      tags:
+        - Apps Management
+      summary: Update app
+      description: Update the information of an existing app.
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      requestBody:
+        description: App to update.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AppCreate'
+      responses:
+        '200':
+          description: App Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/App'
+        '404':
+          description: App Not Found
+        '409':
+          description: Conflict
+    delete:
+      tags:
+        - Apps Management
+      summary: Delete app by id
+      description: Delete the app with the specified id
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      responses:
+        '204':
+          description: No Content
+        '404':
+          description: Not Found
+  /apps/{id}/install:
+    post:
+      tags:
+        - Apps Management
+      summary: Install app
+      description: Installs the app with the specified ID.
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      responses:
+        '200':
+          description: App Installed
+        '400':
+          description: Installation Failed
+  /apps/{id}/upgrade:
+    post:
+      tags:
+        - Apps Management
+      summary: Upgrade app
+      description: Upgrades the app with the specified ID.
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      responses:
+        '200':
+          description: App Upgraded
+        '400':
+          description: Upgrade Failed
+  /apps/{id}/uninstall:
+    post:
+      tags:
+        - Apps Management
+      summary: Uninstall app
+      description: Uninstalls the app with the specified ID.
+      parameters:
+        - $ref: '#/components/parameters/kebab-id'
+      responses:
+        '200':
+          description: App Uninstalled
+        '400':
+          description: Uninstallation Failed
   '/abilities/{id}/dependencies/{dependency_id}/install':
     post:
       tags:
@@ -154,13 +283,13 @@ paths:
         '200':
           description: Install started
     parameters:
-      - $ref: '#/components/parameters/snake_id'
+      - $ref: '#/components/parameters/kebab-id'
       - name: dependency_id
         in: path
         description: id of the dependency
         required: true
         schema:
-          $ref: '#/components/schemas/kebab-snake_id'
+          $ref: '#/components/schemas/kebab-id'
   /assets:
     get:
       tags:
@@ -552,6 +681,8 @@ paths:
 tags:
   - name: Abilities Management
     description: Installation and configuration of abilities
+  - name: Apps Management
+    description: Installation and configuration of apps
   - name: Asset Management
     description: Management of assets
   - name: Channel Management
@@ -577,20 +708,13 @@ components:
       required: true
       schema:
         $ref: '#/components/schemas/uuid4'
-    snake_id:
+    kebab-id:
       name: id
       in: path
       description: id of the object
       required: true
       schema:
-        $ref: '#/components/schemas/snake_id'
-    kebab-snake_id:
-      name: id
-      in: path
-      description: id of the object
-      required: true
-      schema:
-        $ref: '#/components/schemas/kebab-snake_id'
+        $ref: '#/components/schemas/kebab-id'
     key:
       name: key
       in: path
@@ -639,18 +763,12 @@ components:
         type: string
         example: '{"title":"bar"}'
   schemas:
-    snake_id:
-      type: string
-      minLength: 2
-      maxLength: 100
-      example: fetch_llama_cpp
-      pattern: ^[a-z0-9]+(_[a-z0-9]+)*$
-    kebab-snake_id:
+    kebab-id:
       type: string
       minLength: 2
       maxLength: 100
       example: langchain-core
-      pattern: ^[a-z0-9]+([_-][a-z0-9]+)*$
+      pattern: ^[a-z0-9]+([-][a-z0-9]+)*$
     semVer:
       type: string
       example: '1.1.0'
@@ -718,7 +836,7 @@ components:
       description: Additional abilities (plug-ins)
       properties:
         id:
-          $ref: '#/components/schemas/snake_id'
+          $ref: '#/components/schemas/kebab-id'
         name:
           $ref: '#/components/schemas/name'
         description:
@@ -777,14 +895,42 @@ components:
             type: object
             properties:
               type:
-                $ref: '#/components/schemas/snake_id'
+                $ref: '#/components/schemas/kebab-id'
               id:
-                $ref: '#/components/schemas/kebab-snake_id'
+                $ref: '#/components/schemas/kebab-id'
               name:
                 $ref: '#/components/schemas/textShort'
               version:
                 type: string
                 example: '>=2.8'
+    App:
+      type: object
+      title: App
+      properties:
+        id:
+          $ref: '#/components/schemas/kebab-id'
+        user_id:
+          $ref: '#/components/schemas/uuid4'
+        title:
+          $ref: '#/components/schemas/textShort'
+        description:
+          $ref: '#/components/schemas/textLong'
+      required:
+        - id
+        - title
+    AppCreate:
+      type: object
+      title: AppCreate
+      description: App without id which is server-generated.
+      properties:
+        user_id:
+          $ref: '#/components/schemas/uuid4'
+        title:
+          $ref: '#/components/schemas/textShort'
+        description:
+          $ref: '#/components/schemas/textLong'
+      required:
+        - title
     Asset:
       type: object
       title: Asset
