@@ -18,6 +18,7 @@ venv_bin_dir = venv_dir / 'bin'
 apps_dir = base_dir / 'apps'
 default_app = 'default'
 default_app_dir = apps_dir / default_app
+default_app_dir.mkdir(parents=True, exist_ok=True)
 
 # data
 data_dir = base_dir / 'data'
