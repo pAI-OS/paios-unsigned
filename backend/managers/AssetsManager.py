@@ -1,6 +1,6 @@
 from uuid import uuid4
 import backend.db as db
-from backend.utils import remove_null_fields, zip_fields
+from backend.utils import remove_null_fields
 
 class AssetsManager:
     def __init__(self):
@@ -25,7 +25,7 @@ class AssetsManager:
         result = await db.execute_query(query, (id,))
         if result:
             fields = ['user_id', 'title', 'creator', 'subject', 'description']
-            asset = remove_null_fields(zip_fields(fields, result[0]))
+            asset = remove_null_fields(dict(zip(fields, result[0])))
             asset['id'] = id
             return asset
         return None
@@ -69,7 +69,7 @@ class AssetsManager:
         results = await db.execute_query(base_query, tuple(query_params))
         
         fields = ['id', 'user_id', 'title', 'creator', 'subject', 'description']
-        assets = [remove_null_fields(zip_fields(fields, result)) for result in results]
+        assets = [remove_null_fields(dict(zip(fields, result))) for result in results]
 
         # Get the total count of assets
         total_count_query = 'SELECT COUNT(*) FROM asset'
