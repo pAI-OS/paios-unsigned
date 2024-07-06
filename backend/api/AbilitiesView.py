@@ -3,6 +3,7 @@ from backend.managers.AbilitiesManager import AbilitiesManager
 from backend.pagination import parse_pagination_params
 from pkg_resources import ContextualVersionConflict
 import logging
+from typing import Optional
 logger = logging.getLogger(__name__)
 
 class AbilitiesView:
@@ -27,7 +28,7 @@ class AbilitiesView:
             return JSONResponse(status_code=200, content=ability)
         return JSONResponse(status_code=404, content={"message": "Ability not found"})
 
-    async def search(self, filter: str = None, range: str = None, sort: str = None):
+    async def search(self, filter: Optional[str] = None, range: Optional[str] = None, sort: Optional[str] = None):
         result = parse_pagination_params(filter, range, sort)
         if isinstance(result, JSONResponse):
             return result
@@ -49,7 +50,7 @@ class AbilitiesView:
         }
         return JSONResponse(abilities, status_code=200, headers=headers)
 
-    async def install(self, id: str, version: str = None):
+    async def install(self, id: str, version: Optional[str] = None):
         try:
             if self.am.install_ability(id, version):
                 return JSONResponse(status_code=200, content={"message": "Ability installed"})
@@ -58,7 +59,7 @@ class AbilitiesView:
         except ValueError as e:
             return JSONResponse(status_code=400, content={"message": str(e)})
 
-    async def upgrade(self, id: str, version: str = None):
+    async def upgrade(self, id: str, version: Optional[str] = None):
         try:
             if self.am.upgrade_ability(id, version):
                 return JSONResponse(status_code=200, content={"message": "Ability upgraded"})

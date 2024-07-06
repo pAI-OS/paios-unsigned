@@ -2,6 +2,7 @@ from starlette.responses import JSONResponse, Response
 from common.paths import api_base_url
 from backend.managers.ChannelsManager import ChannelsManager
 from backend.pagination import parse_pagination_params
+from typing import Optional
 
 class ChannelsView:
     def __init__(self):
@@ -25,7 +26,7 @@ class ChannelsView:
         await self.cm.delete_channel(channel_id)
         return Response(status_code=204)
 
-    async def search(self, filter: str = None, range: str = None, sort: str = None):
+    async def search(self, filter: Optional[str] = None, range: Optional[str] = None, sort: Optional[str] = None):
         result = parse_pagination_params(filter, range, sort)
         if isinstance(result, JSONResponse):
             return result

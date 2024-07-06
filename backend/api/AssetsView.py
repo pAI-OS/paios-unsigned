@@ -2,6 +2,7 @@ from starlette.responses import JSONResponse, Response
 from backend.managers.AssetsManager import AssetsManager
 from common.paths import api_base_url
 from backend.pagination import parse_pagination_params
+from typing import Optional
 
 class AssetsView:
     def __init__(self):
@@ -41,7 +42,7 @@ class AssetsView:
         await self.am.delete_asset(id)
         return Response(status_code=204)
     
-    async def search(self, filter: str = None, range: str = None, sort: str = None):
+    async def search(self, filter: Optional[str] = None, range: Optional[str] = None, sort: Optional[str] = None):
         result = parse_pagination_params(filter, range, sort)
         if isinstance(result, JSONResponse):
             return result

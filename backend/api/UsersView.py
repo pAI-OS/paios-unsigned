@@ -3,6 +3,7 @@ from common.paths import api_base_url
 from backend.managers.UsersManager import UsersManager
 from backend.pagination import parse_pagination_params
 from aiosqlite import IntegrityError
+from typing import Optional
 
 class UsersView:
     def __init__(self):
@@ -29,7 +30,7 @@ class UsersView:
         await self.um.delete_user(id)
         return Response(status_code=204)
 
-    async def search(self, filter: str = None, range: str = None, sort: str = None):
+    async def search(self, filter: Optional[str] = None, range: Optional[str] = None, sort: Optional[str] = None):
         result = parse_pagination_params(filter, range, sort)
         if isinstance(result, JSONResponse):
             return result

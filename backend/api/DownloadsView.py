@@ -2,6 +2,7 @@ from starlette.requests import Request
 from starlette.responses import Response, JSONResponse
 from backend.managers.DownloadsManager import DownloadsManager
 from backend.pagination import parse_pagination_params
+from typing import Optional
 
 class DownloadsView:
     def __init__(self):
@@ -32,7 +33,7 @@ class DownloadsView:
         await self.manager.delete_download(id)
         return Response(status_code=204)
 
-    async def search(self, filter: str = None, range: str = None, sort: str = None):
+    async def search(self, filter: Optional[str] = None, range: Optional[str] = None, sort: Optional[str] = None):
         result = parse_pagination_params(filter, range, sort)
         if isinstance(result, JSONResponse):
             return result
