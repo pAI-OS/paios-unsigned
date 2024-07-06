@@ -10,15 +10,17 @@ def check_env():
         if not venv_path.exists():
             print("No virtual environment found at {} so you will need to create one.".format(venv_path))
             if os.name == "posix": # Linux/Mac
-                print("\nYou can use the scripts/setup_environment.sh script to do this, or do it manually:")
-                print("    python3 -m venv .venv")
-                print("    source .venv/bin/activate")
-                print("    pip install -r backend/requirements.txt")
+                print("\nYou can use the scripts/setup_environment.sh script to do this, or do it manually:",
+                "    python3 -m venv .venv",
+                "    source .venv/bin/activate",
+                "    pip install -r backend/requirements.txt",
+                sep="\n")
             elif os.name == "nt": # Windows
-                print("\nYou can use the scripts\\setup_environment.ps1 script to do this, or do it manually from the root directory:\n")
-                print("    python -m venv .venv")
-                print("    .venv\\Scripts\\activate")
-                print("    pip install -r backend\\requirements.txt\n")
+                print("\nYou can use the scripts\\setup_environment.ps1 script to do this, or do it manually from the root directory:\n",
+                "    python -m venv .venv",
+                "    .venv\\Scripts\\activate",
+                "    pip install -r backend\\requirements.txt\n",
+                sep="\n")
             sys.exit(1)
         else:
             print(f"Virtual environment found at {venv_path}. You can activate it with:\n")
