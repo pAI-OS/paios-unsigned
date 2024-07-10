@@ -3,7 +3,10 @@ import subprocess
 import sys
 import os
 import shutil
+import argparse
 from pathlib import Path
+from collections.abc import Sequence
+from typing import Optional
 
 # Ensure the parent directory is in sys.path so relative imports work.
 base_dir = Path(__file__).parent.parent
@@ -17,6 +20,8 @@ if os.name == 'nt':  # Windows
     venv_python = venv_dir / 'Scripts' / 'python'
 else:  # POSIX (Linux, macOS, etc.)
     venv_python = venv_dir / 'bin' / 'python'
+
+SUCCESS = 0
 
 def setup_backend():
     print("Setting up the backend environment...")
@@ -50,12 +55,27 @@ def setup_vscode():
             shutil.copy(sample_file, target_file)
             print(f"Copied {sample_file} to {target_file}")
 
-def main():
+def main(argv: Optional[Sequence[str]] = None):
+    parser = argparse.ArgumentParser(
+        description="Setup you paios environment by installing the requisite dependencies."
+    )
+    parser.add_argument(
+        "--vscode", 
+        required=False, 
+        action="store_true",
+        help="Setup vscode configuration."
+    )
+
+    args = parser.parse_args(argv)
+
     setup_backend()
     build_frontend()
-    setup_vscode()
+
+    if args.vscode:
+        setup_vscode()
 
     print("Setup complete.")
+    return SUCCESS
 
 if __name__ == "__main__":
-    main()
+    SystemExit(main())
