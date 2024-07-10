@@ -1,13 +1,13 @@
 import asyncio
 import sys
-import signal
+#import signal
 from pathlib import Path
 
 # Ensure the parent directory is in sys.path so relative imports work.
 base_dir = Path(__file__).parent
 if base_dir not in sys.path:
     sys.path.append(str(base_dir))
-from common.paths import backend_dir, venv_dir
+from common.paths import base_dir, backend_dir, venv_subdir
 from common.config import logging_config
 
 # check environment
@@ -42,7 +42,7 @@ if __name__ == "__main__":
     
     logger.info("Running the app...")
     try:
-        uvicorn.run("app:create_app", host="localhost", port=3080, factory=True, workers=1, reload=True, reload_dirs=[backend_dir], reload_excludes=[venv_dir], log_config=logging_config)
+        uvicorn.run("app:create_app", host="localhost", port=3080, factory=True, workers=1, reload=True, reload_dirs=[backend_dir], reload_excludes=[base_dir / venv_subdir], log_config=logging_config)
     except KeyboardInterrupt:
         #handle_keyboard_interrupt(None, None)
         pass

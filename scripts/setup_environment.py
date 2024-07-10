@@ -10,9 +10,10 @@ base_dir = Path(__file__).parent.parent
 if base_dir not in sys.path:
     sys.path.append(str(base_dir))
 
-from common.paths import base_dir, venv_dir, backend_dir, frontend_dir, env_file
+from common.paths import base_dir, venv_subdir, backend_dir, frontend_dir
 
 # Determine the correct path for the Python executable based on the OS
+venv_dir = base_dir / venv_subdir
 if os.name == 'nt':  # Windows
     venv_python = venv_dir / 'Scripts' / 'python'
 else:  # POSIX (Linux, macOS, etc.)

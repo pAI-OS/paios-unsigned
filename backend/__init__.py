@@ -2,6 +2,9 @@
 import os
 from common import paths
 
+# instantiate the managers
+import backend.managers
+
 # List of directories to ensure exist
 required_directories = [
     paths.data_dir

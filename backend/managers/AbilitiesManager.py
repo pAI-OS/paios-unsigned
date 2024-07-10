@@ -2,7 +2,7 @@ import json
 import re
 import os
 import signal
-from common.paths import abilities_dir, abilities_data_dir, venv_bin_dir
+from common.paths import abilities_dir, abilities_data_dir, apps_dir, default_app_id, venv_subdir
 from backend.utils import remove_null_fields
 from enum import Enum
 from pathlib import Path
@@ -291,14 +291,14 @@ class AbilitiesManager:
             else:
                 _invalid_state_transition()
 
-    def start_ability(self, ability_id):
+    def start_ability(self, ability_id, app_id=default_app_id):
         import stat
         import os
         import sys
         import subprocess
         import shlex
 
-        print(f"Starting ability {ability_id}")
+        print(f"Starting ability {ability_id} in app {app_id}")
         ability = self.get_ability(ability_id)
         if ability is None:
             return {"error": "Ability not found"}, 404
@@ -312,6 +312,8 @@ class AbilitiesManager:
         if start_script_parts is None:
             return {"error": "Unable to determine start script executable"}, 500
 
+        venv_dir = app_id / venv_subdir
+        venv_bin_dir = venv_dir / ('bin' if os.name == "posix" else 'Scripts')
         search_paths = [abilities_dir / ability_id, abilities_data_dir / ability_id, venv_bin_dir]
         script_found = False
         for path in search_paths:
