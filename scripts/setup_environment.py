@@ -35,8 +35,9 @@ def build_frontend():
         subprocess.run([npm_path, "run", "build"], check=True)
         os.chdir(current_dir)
     else:
-        print("Skipped as npm command not found.")
-        print("Download Node.js to build the frontend or use a prebuilt version (e.g. canary branch): https://nodejs.org/en/download")
+        print("Skipped as npm command not found.",
+        "Download Node.js to build the frontend or use a prebuilt version (e.g. canary branch): https://nodejs.org/en/download",
+        sep="\n")
 
 def setup_vscode():
     print("Setting up VSCode configuration...")
