@@ -21,7 +21,7 @@ else:  # POSIX (Linux, macOS, etc.)
 def setup_backend():
     print("Setting up the backend environment...")
     # Use the system Python to create the virtual environment
-    subprocess.run([sys.executable, "-m", "venv", str(venv_dir)], check=True)
+    subprocess.run([sys.executable, "-m", "venv", str(venv_dir), "--prompt", "paios"], check=True)
     # Use the Python executable from the virtual environment to install dependencies
     subprocess.run([str(venv_python), "-m", "pip", "install", "-r", str(backend_dir / "requirements.txt")], check=True)
 
